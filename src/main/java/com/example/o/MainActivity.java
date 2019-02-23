@@ -1,7 +1,12 @@
 package com.example.o;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,19 +28,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.navigation);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        Fragment selectedFragment = null;
+                        switch (menuItem.getItemId()){
+                            case R.id.PostItem:
+                                selectedFragment = PostFragment.newInstance();
+                                break;
+                            case R.id.AlbumItem:
+                                selectedFragment = AlbumsFragment.newInstance();
+                                break;
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.main_container, selectedFragment);
+                        transaction.commit();
+                        return true;
+                    }
+                }
+        );
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_container, PostFragment.newInstance());
+        transaction.commit();
 
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        textView= (TextView) findViewById(R.id.textble);
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://jsonplaceholder.typicode.com/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+//        textView= (TextView) findViewById(R.id.textble);
 
 //        getPost();
 //        getComments();
 //        getAlbums();
-        getPhotos();
+//        getPhotos();
     }
 
     private void getPhotos(){
