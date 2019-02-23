@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     final int[] mass = createMassiv();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +32,63 @@ public class MainActivity extends AppCompatActivity {
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         textView= (TextView) findViewById(R.id.textble);
 
-        getPost();
-        getComments();
+//        getPost();
+//        getComments();
+//        getAlbums();
+        getPhotos();
     }
+
+    private void getPhotos(){
+        Call<List<Photos>> call = jsonPlaceHolderApi.getPhotos();
+
+        call.enqueue(new Callback<List<Photos>>() {
+            @Override
+            public void onResponse(Call<List<Photos>> call, Response<List<Photos>> response) {
+                List<Photos> photos = response.body();
+                for (Photos photo : photos){
+                    String str = "";
+                    str += photo.getAlbumId() + "\n";
+                    str += photo.getId() + "\n";
+                    str += photo.getTitle() + "\n";
+                    str += photo.getUrl() + "\n";
+                    str += photo.getThumbnailUrl() + "\n\n";
+
+                    textView.append(str);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Photos>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getAlbums(){
+        Call<List<Albums>> call = jsonPlaceHolderApi.getAlbums(mass);
+
+        call.enqueue(new Callback<List<Albums>>() {
+            @Override
+            public void onResponse(Call<List<Albums>> call, Response<List<Albums>> response) {
+                List<Albums> albums = response.body();
+                for (Albums album : albums){
+                    String str = "";
+                    str += "userId - " + album.getUserId() + "\n";
+                    str += "id - " + album.getId() + "\n";
+                    str += "title - " + album.getTitle() + "\n\n";
+
+                    textView.append(str);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Albums>> call, Throwable t) {
+            }
+        });
+    }
+
+
+
     private void getPost(){
         Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
 

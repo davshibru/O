@@ -14,4 +14,10 @@ public interface JsonPlaceHolderApi {
 
     @GET("comments")
     Call<List<Comments>> getComm(@Query("postId") int[] postId);
+
+    @GET("albums")
+    Call<List<Albums>> getAlbums(@Query("id") int[] id);
+
+    @GET("photos")
+    Call<List<Photos>> getPhotos();
 }
