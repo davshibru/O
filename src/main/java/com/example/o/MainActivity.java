@@ -23,18 +23,35 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+//    private static String lstText;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private TextView textView;
-    final int[] mass = createMassiv();
+//    final int[] mass = createMassiv();
     private ArrayList<String> mTitle = new ArrayList<>();
     private ArrayList<String> mText = new ArrayList<>();
-
+    private String lstTitle ="d";
+    private String lstText = "ddddd";
+    String txt;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        textView = (TextView) findViewById(R.id.textView);
+
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://jsonplaceholder.typicode.com/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+//        getPost();
+//        getComments();
+
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
 
@@ -45,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         Fragment selectedFragment = null;
                         switch (menuItem.getItemId()){
                             case R.id.PostItem:
-                                selectedFragment = PostFragment.newInstance();
+                                selectedFragment = PostFragment.newInstance(lstTitle,lstText);
                                 break;
                             case R.id.AlbumItem:
                                 selectedFragment = AlbumsFragment.newInstance();
@@ -59,17 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container, PostFragment.newInstance());
+        transaction.replace(R.id.main_container, PostFragment.newInstance(lstTitle,lstText));
         transaction.commit();
-
-
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://jsonplaceholder.typicode.com/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
 //        getPost();
 //        getComments();
@@ -77,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
 //        getPhotos();
 //        initImageVitMaps();
     }
+
+//    public void TextAndTitle(String strTitle){
+//        txt = strTitle;
+//        textView.append(txt);
+//    }
 
 //    private void getPhotos(){
 //        Call<List<Photos>> call = jsonPlaceHolderApi.getPhotos();
@@ -128,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 //
 //
-
+//
 //    private void getPost(){
 //        Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
 //
@@ -136,15 +149,16 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
 //                List<Post> posts = response.body();
-//                for (Post post : posts) {
-//                    mTitle.add(post.getTitle());
-//                    mText.add(post.getBody());
+//                String str = "";
+//                for (Post post : posts ){
+//                    str += post.getTitle() + "\n";
+//                    str += post.getBody() + "\n";
 //                }
+//                TextAndTitle(str);
 //            }
 //
 //            @Override
 //            public void onFailure(Call<List<Post>> call, Throwable t) {
-//                textView.setText(t.toString());
 //            }
 //        });
 //    }
@@ -174,25 +188,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-//    private void initImageVitMaps(){
-//        mTitle.add("Тема");
-//        mText.add("Хуема");
-//        mTitle.add("Тема1");
-//        mText.add("Хуема1");
-//        mTitle.add("Тема2");
-//        mText.add("Хуема2");
-//        mTitle.add("Тема3");
-//        mText.add("Хуема3");
 //
-//        initReyclerView();
-//    }
-//
-//    private void initReyclerView(){
-//        RecyclerView recyclerView = findViewById(R.id.recycleView);
-//        RecycleViewAdapter adapter = new RecycleViewAdapter(mTitle,mText,this);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//    }
 
     public int[] createMassiv(){
         int[] m = new int[10];

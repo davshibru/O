@@ -14,16 +14,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class PostFragment extends Fragment {
-
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
     private RecyclerView myrecyclerView;
     private List<PostsExempels> lstPost;
+    public static String massTitle = "S";
+    public static String massText = "D";
 
-    public static PostFragment newInstance(){
+    public static PostFragment newInstance(String mTitle, String mText){
+        massTitle = mTitle;
+        massText = mText;
         PostFragment fragment = new PostFragment();
         return fragment;
     }
@@ -32,7 +39,20 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
         lstPost = new ArrayList<>();
+
+//        getPost();
+
+        String dav = massTitle;
+        String tex = massText;
+        lstPost.add(new PostsExempels(dav, tex));
 
         lstPost.add(new PostsExempels("David","Good man"));
         lstPost.add(new PostsExempels("Vera","Good girl"));
@@ -52,6 +72,38 @@ public class PostFragment extends Fragment {
         myrecyclerView.setAdapter(recycleViewAdapter);
 
         return view;
+    }
+
+//    private void getPost(){
+//        Call<List<Post>> call = jsonPlaceHolderApi.getPost(createMassiv());
+//        massTitle = "dav";
+//        massText = "dav";
+//        call.enqueue(new Callback<List<Post>>(){
+//            @Override
+//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+//                massTitle ="David";
+//                massText = "kross";
+//                List<Post> posts = response.body();
+//                for (Post post : posts) {
+//                    massTitle = "devinf";
+//                    massText = "adwddddddd";
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Post>> call, Throwable t) {
+//                massTitle = t.toString();
+//                massText = toString();
+//            }
+//        });
+//    }
+
+    public int[] createMassiv(){
+        int[] m = new int[1];
+        for (int i = 0; i < 10; i++){
+            m[i] = (int)(Math.random() * 100);
+        }
+        return m;
     }
 
 }

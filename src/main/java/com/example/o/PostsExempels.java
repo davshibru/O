@@ -2,6 +2,10 @@ package com.example.o;
 
 public class PostsExempels {
 
+    public static void PostReady(){
+    String dav = "dav";
+    String tex = "tex";
+}
     private String Title;
     private String Text;
     private String FirstLater;
