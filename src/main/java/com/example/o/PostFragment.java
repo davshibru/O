@@ -11,12 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class PostFragment extends Fragment {
 
+    private RecyclerView myrecyclerView;
+    private List<PostsExempels> lstPost;
 
     public static PostFragment newInstance(){
         PostFragment fragment = new PostFragment();
@@ -26,19 +31,25 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        lstPost = new ArrayList<>();
+
+        lstPost.add(new PostsExempels("David","Good man"));
+        lstPost.add(new PostsExempels("Vera","Good girl"));
+        lstPost.add(new PostsExempels("Shibru","Cool family"));
+        lstPost.add(new PostsExempels("David","Good man"));
+        lstPost.add(new PostsExempels("Vera","Good girl"));
+        lstPost.add(new PostsExempels("Shibru","Cool family"));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post,container,false);
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter();
-        recyclerView.setAdapter(recycleViewAdapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        myrecyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),lstPost);
+        myrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myrecyclerView.setAdapter(recycleViewAdapter);
 
         return view;
     }

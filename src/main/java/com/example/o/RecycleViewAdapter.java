@@ -1,6 +1,7 @@
 package com.example.o;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,125 +11,83 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class RecycleViewAdapter extends RecyclerView.Adapter {
+public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.MyViewHolder> {
+
+    Context mContext;
+    List<PostsExempels> mData;
+
+
+    public RecycleViewAdapter(Context mContext, List<PostsExempels> mData) {
+        this.mContext = mContext;
+        this.mData = mData;
+    }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_item_fragment, viewGroup,false);
-        return new ListViewHolder(view);
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v;
+        v = LayoutInflater.from(mContext).inflate(R.layout.post_item_fragment,viewGroup,false);
+        final MyViewHolder vHolder = new MyViewHolder(v);
+
+        return vHolder;
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        ((ListViewHolder) viewHolder).binView(i);
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
+
+        myViewHolder.tv_title.setText(mData.get(i).getTitle());
+        myViewHolder.tv_text.setText(mData.get(i).getText());
+        final String title = mData.get(i).getTitle();
+        final String text = mData.get(i).getText();
+
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        int color = generator.getRandomColor();
+        TextDrawable drawable = TextDrawable.builder().buildRound(mData.get(i).getFirstLater(), color);
+        myViewHolder.img.setImageDrawable(drawable);
+
+        myViewHolder.item_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, CommentActivity.class);
+                intent.putExtra("title", title);
+                intent.putExtra("text",text);
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        return PostsExempels.title.length;
+        return mData.size();
     }
 
-    private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView mImageView;
-        private TextView mTitle;
-        private TextView mText;
+        private RelativeLayout item_post;
+        private TextView tv_title;
+        private TextView tv_text;
+        private ImageView img;
 
-        public ListViewHolder(View itemView){
-
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTitle = (TextView) itemView.findViewById(R.id.title);
-            mText = (TextView) itemView.findViewById(R.id.text);
-            mImageView = (ImageView) itemView.findViewById(R.id.image);
+            item_post =(RelativeLayout) itemView.findViewById(R.id.parent_layout);
+            tv_title = (TextView) itemView.findViewById(R.id.title);
+            tv_text = (TextView) itemView.findViewById(R.id.text);
+            img = (ImageView) itemView.findViewById(R.id.image);
 
-            itemView.setOnClickListener(this);
-        }
 
-        public void binView(int position){
-            ColorGenerator generator = ColorGenerator.MATERIAL;
-            int color = generator.getRandomColor();
-
-            TextDrawable drawable = TextDrawable.builder().buildRound("A", color);
-            mImageView.setImageDrawable(drawable);
-            mTitle.setText(PostsExempels.title[position]);
-            mText.setText(PostsExempels.text[position]);
 
         }
-
-        public void onClick(View v){
-
-        }
-
-
-
-
-
-
     }
-
-
-//    private static final String TAG = "RecyclerViewAdapter";
-//
-//    private ArrayList<String> mTitle = new ArrayList<>();
-//    private ArrayList<String> mText = new ArrayList<>();
-//    private Context mContext;
-//
-//    public RecycleViewAdapter(ArrayList<String> mTitle, ArrayList<String> mText, Context mContext) {
-//        this.mTitle = mTitle;
-//        this.mText = mText;
-//        this.mContext = mContext;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_item_fragment,viewGroup,false);
-//        ViewHolder holder = new ViewHolder(view);
-//        return holder;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-//        ColorGenerator generator = ColorGenerator.MATERIAL;
-//        int color = generator.getRandomColor();
-//
-//        TextDrawable drawable = TextDrawable.builder().buildRound("A", color);
-//        viewHolder.image.setImageDrawable(drawable);
-////        Glide.with(mContext)
-////                .asBitmap()
-////                .load(mImage.get(i))
-////                .into(viewHolder.image);
-//
-//        viewHolder.titel.setText(mTitle.get(i));
-//        viewHolder.text.setText(mText.get(i));
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return mTitle.size();
-//    }
-//
-//    public class ViewHolder extends RecyclerView.ViewHolder{
-//
-//        ImageView image;
-//        TextView titel;
-//        TextView text;
-//        RelativeLayout parentLayout;
-//
-//        public ViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            image = itemView.findViewById(R.id.image);
-//            titel = itemView.findViewById(R.id.title);
-//            text = itemView.findViewById(R.id.text);
-//            parentLayout = itemView.findViewById(R.id.parent_layout);
-//        }
-//    }
 }

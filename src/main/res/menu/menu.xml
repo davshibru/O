@@ -2,8 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/PostItem"
+        android:icon="@drawable/ic_post"
         android:title="Posts"/>
     <item
         android:id="@+id/AlbumItem"
+        android:icon="@drawable/ic_album"
         android:title="Albums"/>
 </menu>
