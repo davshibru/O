@@ -4,49 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="David"
+            android:textSize="20dp"
+            android:id="@+id/titleOfPost"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kuuuuuuuuuuuuuuuuuuuuuuuuuuu"
+            android:textSize="15dp"
+            android:id="@+id/textOfPost"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Комментарии"
+        android:textStyle="bold"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="35dp"
-        android:id="@+id/tv"/>
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:padding="10dp"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textStyle="bold"-->
-            <!--android:text="David"-->
-            <!--android:textSize="20dp"-->
-            <!--android:id="@+id/titleOfPost"-->
-            <!--android:layout_margin="10dp"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="kuuuuuuuuuuuuuuuuuuuuuuuuuuu"-->
-            <!--android:textSize="15dp"-->
-            <!--android:id="@+id/textOfPost"-->
-            <!--android:layout_margin="10dp"/>-->
-
-    <!--</LinearLayout>-->
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="20dp"-->
-        <!--android:text="Комментарии"-->
-        <!--android:textStyle="bold"/>-->
-
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-    <!--</android.support.v7.widget.RecyclerView>-->
+        android:id="@+id/comment_recycleview">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

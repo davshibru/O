@@ -1,6 +1,7 @@
 package com.example.o;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -36,13 +37,21 @@ public class RecyclerViewAdapterPhoto extends RecyclerView.Adapter<RecyclerViewA
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MtViewHolder mtViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MtViewHolder mtViewHolder, final int i) {
 
         mtViewHolder.tv_name.setText(mData.get(i).getNameOfPhoto());
         Glide.with(mContext)
                 .asBitmap()
                 .load(mData.get(i).getPhoto())
                 .into(mtViewHolder.iv_photo);
+        mtViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,ViewPhotoActivity.class);
+                intent.putExtra("photo",mData.get(i).getPhoto());
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
@@ -62,6 +71,7 @@ public class RecyclerViewAdapterPhoto extends RecyclerView.Adapter<RecyclerViewA
 
             iv_photo = (ImageView) itemView.findViewById(R.id.photo);
             tv_name = (TextView) itemView.findViewById(R.id.textOfPhoto);
+            cardView = (CardView) itemView.findViewById(R.id.cardview_item_photo);
         }
     }
 }
