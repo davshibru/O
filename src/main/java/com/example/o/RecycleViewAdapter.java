@@ -26,6 +26,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     List<PostsExempels> mData;
 
 
+
     public RecycleViewAdapter(Context mContext, List<PostsExempels> mData) {
         this.mContext = mContext;
         this.mData = mData;
@@ -49,6 +50,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         myViewHolder.tv_text.setText(mData.get(i).getText());
         final String title = mData.get(i).getTitle();
         final String text = mData.get(i).getText();
+        final String id = "" + mData.get(i).getId();
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
@@ -61,6 +63,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
                 Intent intent = new Intent(mContext, CommentActivity.class);
                 intent.putExtra("title", title);
                 intent.putExtra("text",text);
+                intent.putExtra("id",id);
                 mContext.startActivity(intent);
             }
         });

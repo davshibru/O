@@ -8,6 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -17,20 +24,58 @@ public class CommentActivity extends AppCompatActivity {
     private ArrayList<String> mComment = new ArrayList<>();
     TextView mTitle;
     TextView mText;
-
+    JsonPlaceHolderApi jsonPlaceHolderApi;
+    private int Id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comments_of_post);
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        getComment();
+
         getIncomingIntent();
+
+
+
+
     }
+
+    private void getComment(){
+            Call<List<Comments>> call = jsonPlaceHolderApi.getComm(Id);
+
+            call.enqueue(new Callback<List<Comments>>() {
+                @Override
+                public void onResponse(Call<List<Comments>> call, Response<List<Comments>> response) {
+                    List<Comments> comments = response.body();
+                    for (Comments comm : comments){
+                        mUser.add(comm.getName());
+                        mEmail.add(comm.getEmail());
+                        mComment.add(comm.getBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Comments>> call, Throwable t) {
+
+                }
+            });
+        }
 
     private void getIncomingIntent(){
 
             String title = getIntent().getStringExtra("title");
             String text = getIntent().getStringExtra("text");
-
+            String id = getIntent().getStringExtra("id");
+            Id = Integer.parseInt(id);
             setText(title, text);
     }
 
@@ -39,38 +84,13 @@ public class CommentActivity extends AppCompatActivity {
         mTitle = (TextView) findViewById(R.id.titleOfPost);
         mText = (TextView) findViewById(R.id.textOfPost);
 
-        mTitle.setText(title);
+        mTitle.setText(title + Id);
         mText.setText(text);
-
-        setRecyclerView();
-
-
-    }
-
-    private void setRecyclerView(){
-
-        mImage.add("A");
-        mUser.add("Dimenter Dimenter Dimenter Dimenter Dimenter");
-        mEmail.add("shibru_@gmail.kg");
-        mComment.add("its not good its not good its not good its not good v its not good its not good its not good");
-
-        mImage.add("D");
-        mUser.add("Dimenter Dimenter Dimenter Dimenter Dimenter");
-        mEmail.add("shibru_@gmail.kg");
-        mComment.add("its not good its not good its not good its not good v its not good its not good its not good");
-
-        mImage.add("C");
-        mUser.add("Dimenter Dimenter Dimenter Dimenter Dimenter");
-        mEmail.add("shibru_@gmail.kg");
-        mComment.add("its not good its not good its not good its not good v its not good its not good its not good");
-
-        mImage.add("B");
-        mUser.add("Dimenter Dimenter Dimenter Dimenter Dimenter");
-        mEmail.add("shibru_@gmail.kg");
-        mComment.add("its not good its not good its not good its not good v its not good its not good its not good");
 
         doIt();
     }
+
+
 
     private void doIt(){
         RecyclerView recyclerView = findViewById(R.id.comment_recycleview);
@@ -78,4 +98,5 @@ public class CommentActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapterComment);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
 }

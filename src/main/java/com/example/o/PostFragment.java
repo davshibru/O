@@ -24,13 +24,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PostFragment extends Fragment {
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private RecyclerView myrecyclerView;
-    private List<PostsExempels> lstPost;
+    private static List<PostsExempels> lstPost;
     public static String massTitle = "S";
     public static String massText = "D";
+    private static ArrayList<String> mUser = new ArrayList<>();
+    private static ArrayList<String> mEmail = new ArrayList<>();
+    private static ArrayList<String> mComment = new ArrayList<>();
 
-    public static PostFragment newInstance(String mTitle, String mText){
-        massTitle = mTitle;
-        massText = mText;
+    public static PostFragment newInstance(ArrayList<PostsExempels> list){
+        lstPost = list;
         PostFragment fragment = new PostFragment();
         return fragment;
     }
@@ -38,72 +40,18 @@ public class PostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-        lstPost = new ArrayList<>();
-
-//        getPost();
-
-        String dav = massTitle;
-        String tex = massText;
-        lstPost.add(new PostsExempels(dav, tex));
-
-        lstPost.add(new PostsExempels("David","Good man"));
-        lstPost.add(new PostsExempels("Vera","Good girl"));
-        lstPost.add(new PostsExempels("Shibru","Cool family"));
-        lstPost.add(new PostsExempels("David","Good man"));
-        lstPost.add(new PostsExempels("Vera","Good girl"));
-        lstPost.add(new PostsExempels("Shibru","Cool family"));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post,container,false);
+        View view = inflater.inflate(R.layout.fragment_post, container, false);
         myrecyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(),lstPost);
+        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(), lstPost);
         myrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myrecyclerView.setAdapter(recycleViewAdapter);
 
         return view;
-    }
-
-//    private void getPost(){
-//        Call<List<Post>> call = jsonPlaceHolderApi.getPost(createMassiv());
-//        massTitle = "dav";
-//        massText = "dav";
-//        call.enqueue(new Callback<List<Post>>(){
-//            @Override
-//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-//                massTitle ="David";
-//                massText = "kross";
-//                List<Post> posts = response.body();
-//                for (Post post : posts) {
-//                    massTitle = "devinf";
-//                    massText = "adwddddddd";
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Post>> call, Throwable t) {
-//                massTitle = t.toString();
-//                massText = toString();
-//            }
-//        });
-//    }
-
-    public int[] createMassiv(){
-        int[] m = new int[1];
-        for (int i = 0; i < 10; i++){
-            m[i] = (int)(Math.random() * 100);
-        }
-        return m;
     }
 
 }

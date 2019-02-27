@@ -13,8 +13,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,12 +34,13 @@ public class MainActivity extends AppCompatActivity {
 //    private static String lstText;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private TextView textView;
-//    final int[] mass = createMassiv();
+    final int[] mass = createMassiv();
     private ArrayList<String> mTitle = new ArrayList<>();
     private ArrayList<String> mText = new ArrayList<>();
-    private String lstTitle ="d";
-    private String lstText = "ddddd";
-    String txt;
+    private String title ="d";
+    private String text = "d";
+    ArrayList<PostsExempels> list = new ArrayList<>();
+    ArrayList<Comments> commentlist = new ArrayList<>();
 
 
     @Override
@@ -39,21 +48,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        textView = (TextView) findViewById(R.id.textView);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://jsonplaceholder.typicode.com/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-//        getPost();
+
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        getPost();
 //        getComments();
+
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
+
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         Fragment selectedFragment = null;
                         switch (menuItem.getItemId()){
                             case R.id.PostItem:
-                                selectedFragment = PostFragment.newInstance(lstTitle,lstText);
+                                selectedFragment = PostFragment.newInstance(list);
                                 break;
                             case R.id.AlbumItem:
                                 selectedFragment = AlbumsFragment.newInstance();
@@ -76,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_container, PostFragment.newInstance(lstTitle,lstText));
+        transaction.replace(R.id.main_container, PostFragment.newInstance(list));
         transaction.commit();
 
 //        getPost();
@@ -142,26 +154,25 @@ public class MainActivity extends AppCompatActivity {
 //
 //
 //
-//    private void getPost(){
-//        Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
-//
-//        call.enqueue(new Callback<List<Post>>(){
-//            @Override
-//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-//                List<Post> posts = response.body();
-//                String str = "";
-//                for (Post post : posts ){
-//                    str += post.getTitle() + "\n";
-//                    str += post.getBody() + "\n";
-//                }
-//                TextAndTitle(str);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Post>> call, Throwable t) {
-//            }
-//        });
-//    }
+    private void getPost() {
+        Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                List<Post> posts = response.body();
+                for (Post post : posts) {
+                    list.add(new PostsExempels(post.getTitle(),post.getBody(),post.getId()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+            }
+        });
+    }
+
+
 
 //    private void getComments(){
 //        Call<List<Comments>> call = jsonPlaceHolderApi.getComm(mass);
@@ -171,14 +182,9 @@ public class MainActivity extends AppCompatActivity {
 //            public void onResponse(Call<List<Comments>> call, Response<List<Comments>> response) {
 //                List<Comments> comments = response.body();
 //                for (Comments comm : comments){
-//                    String text = "";
-//                    text += "postId - " + comm.getPostId() + "\n";
-//                    text += "id - " + comm.getId() + "\n";
-//                    text += "name - " + comm.getName() + "\n";
-//                    text += "email - " + comm.getEmail() + "\n";
-//                    text += "body - " + comm.getBody() + "\n\n";
-//
-//                    textView.append(text);
+//                    mUser.add(comm.getName());
+//                    mEmail.add(comm.getEmail());
+//                    mComment.add(comm.getBody());
 //                }
 //            }
 //
@@ -188,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-//
+
 
     public int[] createMassiv(){
         int[] m = new int[10];

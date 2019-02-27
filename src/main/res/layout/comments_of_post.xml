@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100"
-    android:padding="10dp">
+    android:padding="20dp">
 
 
     <LinearLayout
@@ -21,22 +21,22 @@
             android:text="David"
             android:textSize="20dp"
             android:id="@+id/titleOfPost"
-            android:layout_margin="10dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="kuuuuuuuuuuuuuuuuuuuuuuuuuuu"
+            android:text="kuuuuuuu"
             android:textSize="15dp"
             android:id="@+id/textOfPost"
-            android:layout_margin="10dp"/>
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Комментарии"
         android:textStyle="bold"/>
 

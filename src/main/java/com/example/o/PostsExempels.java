@@ -3,9 +3,12 @@ package com.example.o;
 public class PostsExempels {
 
     public static void PostReady(){
+
     String dav = "dav";
     String tex = "tex";
 }
+
+    private int Id;
     private String Title;
     private String Text;
     private String FirstLater;
@@ -13,7 +16,8 @@ public class PostsExempels {
     public PostsExempels(){
     }
 
-    public PostsExempels(String title, String text) {
+    public PostsExempels(String title, String text, int id) {
+        Id = id;
         Title = title;
         Text = text;
     }
@@ -31,7 +35,9 @@ public class PostsExempels {
         return m;
     }
 
-
+    public int getId() {
+        return Id;
+    }
 
     public void setTitle(String title) {
         Title = title;
