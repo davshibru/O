@@ -22,20 +22,20 @@ public class PhotosActivity extends AppCompatActivity {
         String name = intent.getExtras().getString("NameOfPic");
 
         lstPhoto = new ArrayList<>();
-//        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false",name));
+        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false",name));
         lstPhoto.add(new PhotoExempels("https://w-dog.ru/wallpapers/11/18/443734993463506.jpg", "flawers"));
-//        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
-//        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
-//        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
-//        lstPhoto.add(new PhotoExempels("https://w-dog.ru/wallpapers/11/18/443734993463506.jpg", "flawers"));
-//        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
-//        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
-//        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
-//        lstPhoto.add(new PhotoExempels("https://w-dog.ru/wallpapers/11/18/443734993463506.jpg", "flawers"));
-//        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
-//        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
-//        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
-//
+        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
+        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
+        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
+        lstPhoto.add(new PhotoExempels("https://w-dog.ru/wallpapers/11/18/443734993463506.jpg", "flawers"));
+        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
+        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
+        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
+        lstPhoto.add(new PhotoExempels("https://w-dog.ru/wallpapers/11/18/443734993463506.jpg", "flawers"));
+        lstPhoto.add(new PhotoExempels("https://images.wallpaperscraft.ru/image/kot_pushistyy_zabor_sidet_osheynik_59738_1920x1080.jpg","cat"));
+        lstPhoto.add(new PhotoExempels("https://avatars.mds.yandex.net/get-pdb/1592033/dc585aab-cf1d-4144-b004-950612f80727/s1200?webp=false","big cat"));
+        lstPhoto.add(new PhotoExempels("https://www.nastol.com.ua/download.php?img=201306/1440x900/nastol.com.ua-50012.jpg","apple"));
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycleViewPhoto);
         RecyclerViewAdapterPhoto adapterPhoto = new RecyclerViewAdapterPhoto(this,lstPhoto);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));

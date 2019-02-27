@@ -61,7 +61,7 @@ public class RecyclerViewAdapterPhoto extends RecyclerView.Adapter<RecyclerViewA
             super(itemView);
 
             iv_photo = (ImageView) itemView.findViewById(R.id.photo);
-            tv_name = (TextView) itemView.findViewById(R.id.textOfPic);
+            tv_name = (TextView) itemView.findViewById(R.id.textOfPhoto);
         }
     }
 }
