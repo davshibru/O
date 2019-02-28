@@ -2,15 +2,23 @@ package com.example.o;
 
 public class PhotoExempels {
 
+    private String id;
     private String photo;
     private String nameOfPhoto;
+    private String BigPhoto;
 
     public PhotoExempels() {
     }
 
-    public PhotoExempels(String photo, String nameOfPhoto) {
+    public PhotoExempels(String id, String photo, String nameOfPhoto, String bigPhoto) {
+        this.id = id;
         this.photo = photo;
         this.nameOfPhoto = nameOfPhoto;
+        BigPhoto = bigPhoto;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getPhoto() {
@@ -21,11 +29,7 @@ public class PhotoExempels {
         return nameOfPhoto;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public void setNameOfPhoto(String nameOfPhoto) {
-        this.nameOfPhoto = nameOfPhoto;
+    public String getBigPhoto() {
+        return BigPhoto;
     }
 }

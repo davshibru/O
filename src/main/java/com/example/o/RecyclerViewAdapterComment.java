@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapterComment extends RecyclerView.Adapter<RecyclerViewAdapterComment.ViewHolder> {
 
+
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mUser = new ArrayList<>();
     private ArrayList<String> mEmail = new ArrayList<>();
@@ -45,11 +46,13 @@ public class RecyclerViewAdapterComment extends RecyclerView.Adapter<RecyclerVie
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
         TextDrawable drawable = TextDrawable.builder().buildRound(mImage.get(i), color);
+
         viewHolder.image.setImageDrawable(drawable);
 
         viewHolder.nameOfUser.setText(mUser.get(i));
         viewHolder.emailOfUser.setText(mEmail.get(i));
         viewHolder.commentOfUser.setText(mComment.get(i));
+
     }
 
     @Override

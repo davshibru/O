@@ -48,7 +48,7 @@ public class RecyclerViewAdapterPhoto extends RecyclerView.Adapter<RecyclerViewA
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,ViewPhotoActivity.class);
-                intent.putExtra("photo",mData.get(i).getPhoto());
+                intent.putExtra("photo",mData.get(i).getBigPhoto());
                 mContext.startActivity(intent);
             }
         });

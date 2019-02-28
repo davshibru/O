@@ -28,19 +28,8 @@ public class AlbumsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        lstAlbum = new ArrayList<>();
-        lstAlbum.add(new AlbumExsempels("fffff"));
-        lstAlbum.add(new AlbumExsempels("ddddd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
-        lstAlbum.add(new AlbumExsempels("fffff"));
-        lstAlbum.add(new AlbumExsempels("ddddd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
-        lstAlbum.add(new AlbumExsempels("fffff"));
-        lstAlbum.add(new AlbumExsempels("ddddd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
-        lstAlbum.add(new AlbumExsempels("adwd"));
+        lstAlbum = ((MainActivity) getActivity()).getAlbums();
+        ((MainActivity) getActivity()).getPost();
     }
 
     @Override

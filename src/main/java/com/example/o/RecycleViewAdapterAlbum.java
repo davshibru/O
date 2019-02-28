@@ -50,7 +50,7 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext,PhotosActivity.class);
-                intent.putExtra("NameOfPic", mData.get(i).getNameOfAlb());//передай айди альбома для фото
+                intent.putExtra("id", mData.get(i).getIdOfAlb());
                 mContext.startActivity(intent);
 
             }

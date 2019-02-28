@@ -7,6 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CommentActivity extends AppCompatActivity {
 
+    private ArrayList<Integer> mId = new ArrayList<>();
     private ArrayList<String> mImage = new ArrayList<>();
     private ArrayList<String> mUser = new ArrayList<>();
     private ArrayList<String> mEmail = new ArrayList<>();
@@ -25,57 +32,60 @@ public class CommentActivity extends AppCompatActivity {
     TextView mTitle;
     TextView mText;
     JsonPlaceHolderApi jsonPlaceHolderApi;
-    private int Id;
+    private String id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comments_of_post);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-
-
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-        getComment();
 
         getIncomingIntent();
+
+        try {
+            FileInputStream fileImput = openFileInput("comment.txt");
+            InputStreamReader reader = new InputStreamReader(fileImput);
+            BufferedReader buffer = new BufferedReader(reader);
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                if (line.equals(id)) {
+                    line = buffer.readLine();
+                    mUser.add((line));
+                    line = buffer.readLine();
+                    String s = "";
+                    while (true) {
+                        if (("" + line.charAt(0)).equals("]")) {
+                            line = line.substring(1);
+                            break;
+                        } else {
+                            s += line;
+                            line = buffer.readLine();
+                        }
+                    }
+                    mComment.add(s);
+                    mImage.add(line);
+                    line = buffer.readLine();
+                    mEmail.add(line);
+                }
+
+            }
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
 
     }
 
-    private void getComment(){
-            Call<List<Comments>> call = jsonPlaceHolderApi.getComm(Id);
-
-            call.enqueue(new Callback<List<Comments>>() {
-                @Override
-                public void onResponse(Call<List<Comments>> call, Response<List<Comments>> response) {
-                    List<Comments> comments = response.body();
-                    for (Comments comm : comments){
-                        mUser.add(comm.getName());
-                        mEmail.add(comm.getEmail());
-                        mComment.add(comm.getBody());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Comments>> call, Throwable t) {
-
-                }
-            });
-        }
-
     private void getIncomingIntent(){
 
             String title = getIntent().getStringExtra("title");
             String text = getIntent().getStringExtra("text");
-            String id = getIntent().getStringExtra("id");
-            Id = Integer.parseInt(id);
+            id = getIntent().getStringExtra("id");
             setText(title, text);
     }
 
@@ -84,7 +94,7 @@ public class CommentActivity extends AppCompatActivity {
         mTitle = (TextView) findViewById(R.id.titleOfPost);
         mText = (TextView) findViewById(R.id.textOfPost);
 
-        mTitle.setText(title + Id);
+        mTitle.setText(title);
         mText.setText(text);
 
         doIt();
