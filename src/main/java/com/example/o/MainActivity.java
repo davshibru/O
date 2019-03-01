@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -32,16 +33,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 //    private static String lstText;
+    JsonPlaceHolderApi jsonPlaceHolderApi2;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
     private TextView textView;
-    final int[] mass = createMassiv();
+    final int[] mass = createMassiv(10, 100);
     private ArrayList<String> mTitle = new ArrayList<>();
     private ArrayList<String> mText = new ArrayList<>();
     private String title ="d";
     private String text = "d";
     ArrayList<PostsExempels> list = new ArrayList<>();
+    ArrayList<PostsExempels> weatherList = new ArrayList<>();
     ArrayList<AlbumExsempels> AlbList = new ArrayList<>();
     int[] commentMass = createCommentMassiv(mass);
+    final String KEYAPI = "802cfd103b0a97ccd766dd7f86a00d43";
+
+
 
 
     @Override
@@ -49,17 +55,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-
+        Retrofit retrofit2 = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
+        jsonPlaceHolderApi2 = retrofit2.create(JsonPlaceHolderApi.class);
+
+        getWeather("Bishkek");
+        getWeather("Cholpon-Ata");
+        getWeather("Naryn");
+        getWeather("Osh");
+
         getComments();
         getPhotos();
+
+
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
@@ -90,6 +109,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void getWeather(String city){
+        Call<WeatherWeather> call = jsonPlaceHolderApi2.getWeather(city, KEYAPI);
+
+        call.enqueue(new Callback<WeatherWeather>() {
+            @Override
+            public void onResponse(Call<WeatherWeather> call, Response<WeatherWeather> response) {
+
+                WeatherWeather weather = response.body();
+                String getName = weather.getName();
+                String getTemp = "" + weather.getMain().temp;
+                List<Weather> weatherIcon = weather.getWeather();
+                String icon = "";
+                for (Weather weath : weatherIcon){
+                    icon += weath.getIcon();
+                    break;
+                }
+                weatherList.add(new PostsExempels(getName,getTemp,icon,true));
+            }
+
+            @Override
+            public void onFailure(Call<WeatherWeather> call, Throwable t) {
+                Log.e("Problem", t.getMessage());
+            }
+        });
+    }
 
     private void getPhotos(){
         Call<List<Photos>> call = jsonPlaceHolderApi.getPhotos(mass);
@@ -144,20 +188,36 @@ public class MainActivity extends AppCompatActivity {
         });
         return AlbList;
     }
-//
-//
-//
 
 
     public ArrayList<PostsExempels> getPost() {
+
         Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
 
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 List<Post> posts = response.body();
+                int[] massFour = createMassiv(4,10);
+                int i = 0;
+                int count = 0;
                 for (Post post : posts) {
-                    list.add(new PostsExempels(post.getTitle(),post.getBody(),post.getId()));
+                    int Number = 0;
+                    if (massFour[0] == i || massFour[1] == i || massFour[2] == i || massFour[3] == i){
+                        for (PostsExempels weather : weatherList){
+                            if (count == Number) {
+                                list.add(new PostsExempels(weather.getTitle(), weather.getText(), weather.getId(), weather.isWeatherOrPost()));
+                                Number = 0;
+                                break;
+                            }
+                            Number++;
+                        }
+                        count++;
+                    }
+
+                    String id = "" + post.getId();
+                    list.add(new PostsExempels(post.getTitle(),post.getBody(),id,false));
+                    i++;
                 }
             }
 
@@ -206,16 +266,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    public int[] createMassiv(){
-        int[] m = new int[10];
-        for (int i = 0; i < 10; i++){
-            m[i] = (int)(Math.random() * 100);
+    public int[] createMassiv(int ten, int diopazon){
+        int[] m = new int[ten];
+        for (int i = 0; i < ten; i++){
+            m[i] = (int)(Math.random() * diopazon);
         }
         return m;
     }
 
     public int[] createCommentMassiv(int[] mass){
-        int[] m = new int[20];
+        int[] m = new int[mass.length + 10];
         for (int i = 0; i < mass.length; i++){
             m[i] = mass[i];
         }

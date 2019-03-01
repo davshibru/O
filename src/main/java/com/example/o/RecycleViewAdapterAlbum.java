@@ -20,10 +20,12 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
 
     private Context mContext;
     private List<AlbumExsempels> mData;
+    private int mSize;
 
-    public RecycleViewAdapterAlbum(Context mContext, List<AlbumExsempels> mData) {
+    public RecycleViewAdapterAlbum(Context mContext, List<AlbumExsempels> mData, int mSize) {
         this.mContext = mContext;
         this.mData = mData;
+        this.mSize = mSize;
     }
 
     @NonNull
@@ -39,7 +41,8 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, final int i) {
 
-        myHolder.tv_nameOfAlbium.setText(mData.get(i).getNameOfAlb());
+
+        myHolder.tv_nameOfAlbium.setText(mData.get(i).getNameOfAlb() + getItemCount());
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
         TextDrawable drawable = TextDrawable.builder().buildRound(mData.get(i).getFiresLater(), color);
@@ -76,4 +79,10 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
             imgOfAlbum = (ImageView) itemView.findViewById(R.id.pic);
         }
     }
+
+    public void removeItems(){
+        mData.clear();
+
+    }
+
 }

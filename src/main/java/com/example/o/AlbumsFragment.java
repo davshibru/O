@@ -17,6 +17,7 @@ import java.util.List;
 
 public class AlbumsFragment extends Fragment {
 
+    RecyclerView rec;
     List<AlbumExsempels> lstAlbum;
 
     public static AlbumsFragment newInstance(){
@@ -28,6 +29,7 @@ public class AlbumsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         lstAlbum = ((MainActivity) getActivity()).getAlbums();
         ((MainActivity) getActivity()).getPost();
     }
@@ -36,13 +38,24 @@ public class AlbumsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_albums, container, false);
 
-        RecyclerView rec = (RecyclerView) view.findViewById(R.id.recycleViewAlbum);
-        RecycleViewAdapterAlbum mAdapter = new RecycleViewAdapterAlbum(getContext(),lstAlbum);
+        int size = lstAlbum.size();
+
+        rec = (RecyclerView) view.findViewById(R.id.recycleViewAlbum);
+        RecycleViewAdapterAlbum mAdapter = new RecycleViewAdapterAlbum(getContext(),lstAlbum, size);
         rec.setLayoutManager(new GridLayoutManager(getContext(),3));
         rec.setAdapter(mAdapter);
 
+//        removeItems();
+
         return view;
+    }
+
+    public void removeItems(){
+        lstAlbum.clear();
+        rec.getAdapter().notifyDataSetChanged();
+
     }
 }

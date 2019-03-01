@@ -17,6 +17,7 @@ public class PhotoExempels {
         BigPhoto = bigPhoto;
     }
 
+
     public String getId() {
         return id;
     }

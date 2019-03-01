@@ -3,6 +3,7 @@ package com.example.o;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,13 +25,17 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     Context mContext;
     List<PostsExempels> mData;
+    int SizeOfList;
 
-
-
-    public RecycleViewAdapter(Context mContext, List<PostsExempels> mData) {
+    public RecycleViewAdapter(Context mContext, List<PostsExempels> mData, int SizeOfList) {
         this.mContext = mContext;
         this.mData = mData;
+        this.SizeOfList = SizeOfList;
+
+//        revoveItem();
     }
+
+
 
     @NonNull
     @Override
@@ -50,24 +55,41 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         myViewHolder.tv_text.setText(mData.get(i).getText());
         final String title = mData.get(i).getTitle();
         final String text = mData.get(i).getText();
-        final String id = "" + mData.get(i).getId();
+        final String id = mData.get(i).getId();
 
-        ColorGenerator generator = ColorGenerator.MATERIAL;
-        int color = generator.getRandomColor();
-        TextDrawable drawable = TextDrawable.builder().buildRound(mData.get(i).getFirstLater(), color);
-        myViewHolder.img.setImageDrawable(drawable);
+        if (mData.get(i).isWeatherOrPost()) {
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load("http://openweathermap.org/img/w/" + mData.get(i).getId() + ".png")
+                    .into(myViewHolder.img);
+            myViewHolder.item_post.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String URL = "https://o.kg/ru/chastnym-klientam/";
 
-        myViewHolder.item_post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, CommentActivity.class);
-                intent.putExtra("title", title);
-                intent.putExtra("text",text);
-                intent.putExtra("id",id);
-                mContext.startActivity(intent);
-            }
-        });
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(URL)));
 
+                    }
+            });
+        }
+
+        else {
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            int color = generator.getRandomColor();
+            TextDrawable drawable = TextDrawable.builder().buildRound(mData.get(i).getFirstLater(), color);
+            myViewHolder.img.setImageDrawable(drawable);
+
+            myViewHolder.item_post.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CommentActivity.class);
+                    intent.putExtra("title", title);
+                    intent.putExtra("text", text);
+                    intent.putExtra("id", id);
+                    mContext.startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override

@@ -8,18 +8,24 @@ public class PostsExempels {
     String tex = "tex";
 }
 
-    private int Id;
+    private String Id;
     private String Title;
     private String Text;
     private String FirstLater;
+    private boolean weatherOrPost;
 
     public PostsExempels(){
     }
 
-    public PostsExempels(String title, String text, int id) {
+    public PostsExempels(String title, String text, String id, boolean weatherOrPost) {
         Id = id;
         Title = title;
         Text = text;
+        this.weatherOrPost = weatherOrPost;
+    }
+
+    public boolean isWeatherOrPost() {
+        return weatherOrPost;
     }
 
     public String getTitle() {
@@ -35,7 +41,7 @@ public class PostsExempels {
         return m;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
