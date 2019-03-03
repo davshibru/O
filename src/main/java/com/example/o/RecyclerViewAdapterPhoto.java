@@ -39,7 +39,19 @@ public class RecyclerViewAdapterPhoto extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(@NonNull MtViewHolder mtViewHolder, final int i) {
 
-        mtViewHolder.tv_name.setText(mData.get(i).getNameOfPhoto());
+        String str = mData.get(i).getNameOfPhoto();
+        String chr = "";
+        if (str.length() > 10 ){
+            for (int j = 0; j < 10; j++){
+                chr += str.charAt(j);
+            }
+            chr += "...";
+        }
+        else {
+            chr = str;
+        }
+
+        mtViewHolder.tv_name.setText(chr);
         Glide.with(mContext)
                 .asBitmap()
                 .load(mData.get(i).getPhoto())

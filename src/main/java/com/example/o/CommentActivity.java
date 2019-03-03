@@ -10,17 +10,9 @@ import android.widget.TextView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -37,6 +29,8 @@ public class CommentActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comments_of_post);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         getIncomingIntent();

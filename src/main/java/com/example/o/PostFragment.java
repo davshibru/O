@@ -1,16 +1,13 @@
 package com.example.o;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,62 +21,135 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostFragment extends Fragment {
     private RecyclerView myrecyclerView;
-    private static List<PostsExempels> lstPost;
+    private static ArrayList<PostsExempels> lstPost = new ArrayList<>();
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    ArrayList<PostsExempels> weatherList;
+    private int[] mass = createMassiv(10,100);
+    final String KEYAPI = "802cfd103b0a97ccd766dd7f86a00d43";
 
     public PostFragment() {
     }
 
-    public static PostFragment newInstance(){
-        PostFragment fragment = new PostFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-
-            //        lstPost.add(new PostsExempels("eum et est occaecati", "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit", "4", false));
-            //        lstPost.add(new PostsExempels("rem alias distinctio quo quis", "ullam consequatur ut\nomnis quis sit vel consequuntur\nipsa eligendi ipsum molestiae et omnis error nostrum\nmolestiae illo tempore quia et distinctio", "25", false));
-            //        lstPost.add(new PostsExempels("ullam ut quidem id aut vel consequuntur", "debitis eius sed quibusdam non quis consectetur vitae\nimpedit ut qui consequatur sed aut in\nquidem sit nostrum et maiores adipisci atque\nquaerat voluptatem adipisci repudiandae", "31", false));
-            //        lstPost.add(new PostsExempels("optio dolor molestias sit", "temporibus est consectetur dolore\net libero debitis vel velit laboriosam quia\nipsum quibusdam qui itaque fuga rem aut\nea et iure quam sed maxime ut distinctio quae", "44", false));
-            //        lstPost.add(new PostsExempels("ut voluptatem illum ea doloribus itaque eos", "voluptates quo voluptatem facilis iure occaecati\nvel assumenda rerum officia et\nillum perspiciatis ab deleniti\nlaudantium repellat ad ut et autem reprehenderit", "48", false));
-            //        lstPost.add(new PostsExempels("soluta aliquam aperiam consequatur illo quis voluptas", "sunt dolores aut doloribus\ndolore doloribus voluptates tempora et\ndoloremque et quo\ncum asperiores sit consectetur dolorem", "51", false));
-            //        lstPost.add(new PostsExempels("consequatur placeat omnis quisquam quia reprehenderit fugit veritatis facere", "asperiores sunt ab assumenda cumque modi velit\nqui esse omnis\nvoluptate et fuga perferendis voluptas\nillo ratione amet aut et omnis", "60", false));
-            //        lstPost.add(new PostsExempels("enim unde ratione doloribus quas enim ut sit sapiente", "odit qui et et necessitatibus sint veniam\nmollitia amet doloremque molestiae commodi similique magnam et quam\nblanditiis est itaque\nquo et tenetur ratione occaecati molestiae tempora", "74", false));
-            //        lstPost.add(new PostsExempels("labore in ex et explicabo corporis aut quas", "ex quod dolorem ea eum iure qui provident amet\nquia qui facere excepturi et repudiandae\nasperiores molestias provident\nminus incidunt vero fugit rerum sint sunt excepturi provident", "80", false));
-
+        lstPost = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        ((MainActivity) getActivity()).getPost();
-
-        ((MainActivity) getActivity()).getAlbums();
-
-        lstPost = ((MainActivity) getActivity()).getPost();
-
-//        lstPost.add(new PostsExempels("ea molestias quasi exercitationem repellat qui ipsa sit aut", "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut", "3", false));
-
-
-
         View view = inflater.inflate(R.layout.fragment_post, container, false);
-
-        int size = lstPost.size();
-
         myrecyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
-        RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(), lstPost, size);
-        myrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myrecyclerView.setAdapter(recycleViewAdapter);
+
+        ((MainActivity)getActivity()).getComments(mass);
+        getPost();
+        getWeather("Bishkek");
+        getWeather("Cholpon-Ata");
+        getWeather("Naryn");
+        getWeather("Osh");
 
         return view;
 
     }
+
+    public void getPost() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        Call<List<Post>> call = jsonPlaceHolderApi.getPost(mass);
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                List<Post> posts = response.body();
+                int[] massFour = createMassiv(4,10);
+                int count = 0;
+                int i = 0;
+                for (Post post : posts) {
+                    int Number = 0;
+                    if (massFour[0] == i || massFour[1] == i || massFour[2] == i || massFour[3] == i || count == 10 && i < 4){
+                        for (PostsExempels weather : weatherList){
+                            if (count == Number) {
+                                lstPost.add(new PostsExempels(weather.getTitle(), weather.getText(), weather.getId(), weather.isWeatherOrPost()));
+                                break;
+                            }
+                            Number++;
+                        }
+                        count++;
+                    }
+                    String id = "" + post.getId();
+                    String title = post.getTitle();
+                    String text  = post.getBody();
+                    lstPost.add(new PostsExempels(title,text,id,false));
+
+                    RecycleViewAdapter recycleViewAdapter = new RecycleViewAdapter(getContext(), lstPost);
+                    myrecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    myrecyclerView.setAdapter(recycleViewAdapter);
+                    i++;
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+            }
+        });
+    }
+
+    private void getWeather(String city){
+
+        weatherList = new ArrayList<>();
+
+        Retrofit retrofit2 = new Retrofit.Builder()
+                .baseUrl("http://api.openweathermap.org/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi2 = retrofit2.create(JsonPlaceHolderApi.class);
+
+        Call<WeatherWeather> call = jsonPlaceHolderApi2.getWeather(city, KEYAPI);
+
+        call.enqueue(new Callback<WeatherWeather>() {
+            @Override
+            public void onResponse(Call<WeatherWeather> call, Response<WeatherWeather> response) {
+
+                WeatherWeather weather = response.body();
+                String getName = weather.getName();
+                String getTemp = "" + weather.getMain().temp;
+                List<Weather> weatherIcon = weather.getWeather();
+                String icon = "";
+                for (Weather weath : weatherIcon){
+                    icon += weath.getIcon();
+                    break;
+                }
+                    weatherList.add(new PostsExempels(getName,getTemp,icon,true));
+                    Log.e("weather", weather.getName());
+
+            }
+
+
+            @Override
+            public void onFailure(Call<WeatherWeather> call, Throwable t) {
+                Log.e("Problem", t.getMessage());
+            }
+        });
+    }
+
+        public int[] createMassiv(int ten, int diopazon){
+            int[] m = new int[ten];
+            for (int i = 0; i < ten; i++){
+                m[i] = (int)(Math.random() * diopazon);
+            }
+            return m;
+        }
+
 
 
 }

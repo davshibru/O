@@ -20,12 +20,10 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
 
     private Context mContext;
     private List<AlbumExsempels> mData;
-    private int mSize;
 
-    public RecycleViewAdapterAlbum(Context mContext, List<AlbumExsempels> mData, int mSize) {
+    public RecycleViewAdapterAlbum(Context mContext, List<AlbumExsempels> mData) {
         this.mContext = mContext;
         this.mData = mData;
-        this.mSize = mSize;
     }
 
     @NonNull
@@ -40,9 +38,18 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, final int i) {
-
-
-        myHolder.tv_nameOfAlbium.setText(mData.get(i).getNameOfAlb() + getItemCount());
+        String str = mData.get(i).getNameOfAlb();
+        String chr = "";
+        if (str.length() > 10 ){
+            for (int j = 0; j < 10; j++){
+                chr += str.charAt(j);
+            }
+            chr += "...";
+        }
+        else {
+            chr = str;
+        }
+        myHolder.tv_nameOfAlbium.setText(chr);
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
         TextDrawable drawable = TextDrawable.builder().buildRound(mData.get(i).getFiresLater(), color);
@@ -52,7 +59,7 @@ public class RecycleViewAdapterAlbum extends RecyclerView.Adapter<RecycleViewAda
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(mContext,PhotosActivity.class);
+                Intent intent = new Intent(mContext, PhotosActivity.class);
                 intent.putExtra("id", mData.get(i).getIdOfAlb());
                 mContext.startActivity(intent);
 
